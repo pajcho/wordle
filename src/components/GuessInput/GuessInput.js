@@ -7,14 +7,11 @@ function GuessInput({ onNewGuess, disabled }) {
     event.preventDefault();
 
     if (guess.length === 5) {
-      console.log({ guess });
       onNewGuess({
-        value: guess,
+        value: guess.toUpperCase(),
         id: crypto.randomUUID(),
       });
       setGuess("");
-    } else {
-      window.alert("You have to enter exactly 5 characters");
     }
   }
 
@@ -24,12 +21,13 @@ function GuessInput({ onNewGuess, disabled }) {
       <input
         id="guess-input"
         type="text"
+        required
         minLength={5}
         maxLength={5}
         value={guess}
         disabled={disabled}
         onChange={(event) => {
-          setGuess(event.target.value.toUpperCase());
+          setGuess(event.target.value);
         }}
       />
     </form>
