@@ -9,15 +9,18 @@ import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 import WonBanner from "../WonBanner";
 import LostBanner from "../LostBanner";
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
-
 function Game() {
+  const [answer, setAnswer] = useState(() => sample(WORDS));
   const [results, setResults] = useState([]);
   const [gameStatus, setGameStatus] = useState("running");
+
+  console.info({ answer });
+
+  function handleGameRestart() {
+    setAnswer(sample(WORDS));
+    setResults([]);
+    setGameStatus("running");
+  }
 
   function saveNewGuess(guess) {
     const letters = checkGuess(guess.value, answer);
@@ -40,9 +43,17 @@ function Game() {
       />
 
       {gameStatus === "won" && (
-        <WonBanner noOfGuesses={results.length}></WonBanner>
+        <WonBanner
+          noOfGuesses={results.length}
+          handleGameRestart={handleGameRestart}
+        ></WonBanner>
       )}
-      {gameStatus === "lost" && <LostBanner answer={answer}></LostBanner>}
+      {gameStatus === "lost" && (
+        <LostBanner
+          answer={answer}
+          handleGameRestart={handleGameRestart}
+        ></LostBanner>
+      )}
     </>
   );
 }
